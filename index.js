@@ -7,6 +7,7 @@ class ImageZoom {
 
     createImage() {
         const image = document.createElement("img")
+        image.src = this.src
         image.style.width = "100%"
         image.style.height = "100%"
         image.style.objectFit = "cover"
@@ -38,23 +39,11 @@ class ImageZoom {
 
     render(parentElement) {
         const imagemContainer = document.createElement("div")
-        const imagem = document.createElement("img")
+        const imagem = this.createImage()
 
-        imagem.addEventListener("mousemove", (e) => {
-            const image = e.currentTarget
-            const imagemWidth = image.clientWidth
-            const imagemHeight = image.clientHeight
-            const widthPercent = (e.offsetX/imagemWidth)*100
-            const heightPercent = (e.offsetY/imagemHeight)*100
-            image.style.transform = `translate(${(50-widthPercent)}%, ${(50-heightPercent)}%) scale(2)`
-        })
+        imagem.addEventListener("mousemove", this.onImageMouseEnter)
+        imagem.addEventListener("mouseleave", this.onImageMouseLeave)
 
-        imagem.addEventListener("mouseleave", (e) => {
-            const image = e.currentTarget
-            image.style.transform = "none"
-        })
-
-        imagem.src = this.imagemCamisa
         imagemContainer.appendChild(imagem)
         parentElement.appendChild(imagemContainer)
     }
