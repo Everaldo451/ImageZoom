@@ -1,4 +1,4 @@
-class ImagemZoom {
+class ImageZoom {
 
     constructor(src, zoom) {
         this.src = src
@@ -20,7 +20,9 @@ class ImagemZoom {
         const imagemHeight = image.clientHeight
         const widthPercent = (e.offsetX/imagemWidth)*100
         const heightPercent = (e.offsetY/imagemHeight)*100
-        image.style.transform = `translate(${(50-widthPercent)}%, ${(50-heightPercent)}%) scale(2)`
+        const widthTranslatePercent = this.calculateTranslatePercent(widthPercent)
+        const heightTranslatePercent = this.calculateTranslatePercent(heightPercent)
+        image.style.transform = `translate(${(widthTranslatePercent)}%, ${(50-heightTranslatePercent)}%) scale(${this.zoom})`
     }
 
     onImageMouseLeave(e) {
@@ -28,9 +30,14 @@ class ImagemZoom {
         image.style.transform = "none"
     }
 
+    calculateTranslatePercent(percent) {
+        const axisZoom = (this.zoom-1)*50
+        const translatePercent = (50-percent)*axisZoom/50
+        return translatePercent
+    }
+
     render(parentElement) {
         const imagemContainer = document.createElement("div")
-        imagemContainer.classList.add("container")
         const imagem = document.createElement("img")
 
         imagem.addEventListener("mousemove", (e) => {
