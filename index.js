@@ -18,7 +18,12 @@ class ImageZoom {
 
     calculateTranslatePercent(zoom, percent) {
         const axisZoom = (zoom-1)*50
-        const translatePercent = (50-percent)*axisZoom/50
+        const radianos = percent * Math.PI
+        console.log(axisZoom)
+        console.log(radianos)
+        const cosseno = Math.cos(radianos)
+
+        const translatePercent = cosseno*axisZoom
         return translatePercent
     }
 
@@ -29,8 +34,8 @@ class ImageZoom {
             const image = e.currentTarget
             const imagemWidth = image.clientWidth
             const imagemHeight = image.clientHeight
-            const widthPercent = (e.offsetX/imagemWidth)*100
-            const heightPercent = (e.offsetY/imagemHeight)*100
+            const widthPercent = e.offsetX/imagemWidth
+            const heightPercent = e.offsetY/imagemHeight
             const widthTranslatePercent = calculateTranslatePercent(zoom, widthPercent)
             const heightTranslatePercent = calculateTranslatePercent(zoom, heightPercent)
             image.style.transform = `translate(${(widthTranslatePercent)}%, ${(heightTranslatePercent)}%) scale(${zoom})`
