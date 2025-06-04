@@ -16,33 +16,25 @@ class ImageZoom {
         return image
     }
 
-    calculateTranslatePercent(zoom, percent) {
-        const axisZoom = (zoom-1)*50
-        const radianos = percent * Math.PI
-        console.log(axisZoom)
-        console.log(radianos)
-        const cosseno = Math.cos(radianos)
-
-        const translatePercent = cosseno*axisZoom
+    calculateTranslatePercent(zoom, axisPercent) {
+        const halfAxisZoom = (zoom-1)*50
+        const radians = axisPercent * Math.PI
+        const translatePercent = Math.cos(radians)*halfAxisZoom
         return translatePercent
     }
 
-    onImageMouseMoveMaker() {
+    createImageMouseMoveListener() {
         const calculateTranslatePercent = this.calculateTranslatePercent
         const zoom = this.zoom
         return (e) => {
             const image = e.currentTarget
-            const imagemWidth = image.clientWidth
-            const imagemHeight = image.clientHeight
-            const widthPercent = e.offsetX/imagemWidth
-            const heightPercent = e.offsetY/imagemHeight
-            const widthTranslatePercent = calculateTranslatePercent(zoom, widthPercent)
-            const heightTranslatePercent = calculateTranslatePercent(zoom, heightPercent)
-            image.style.transform = `translate(${(widthTranslatePercent)}%, ${(heightTranslatePercent)}%) scale(${zoom})`
+            const translatePercentXAxis = calculateTranslatePercent(zoom, e.offsetX/image.clientWidth)
+            const translatePercentYAxis = calculateTranslatePercent(zoom, e.offsetY/image.clientHeight)
+            image.style.transform = `translate(${(translatePercentXAxis)}%, ${(translatePercentYAxis)}%) scale(${zoom})`
         }
     }
 
-    onImageMouseLeaveMaker() {
+    createImageMouseLeaveListener() {
 
         return (e) => {
             const image = e.currentTarget
@@ -51,14 +43,14 @@ class ImageZoom {
     }
 
     render(parentElement) {
-        const imagemContainer = document.createElement("div")
-        imagemContainer.style.overflow = "hidden"
-        const imagem = this.createImage()
+        const imageContainer = document.createElement("div")
+        imageContainer.style.overflow = "hidden"
+        const image = this.createImage()
 
-        imagem.addEventListener("mousemove", this.onImageMouseMoveMaker())
-        imagem.addEventListener("mouseleave", this.onImageMouseLeaveMaker())
+        image.addEventListener("mousemove", this.createImageMouseMoveListener())
+        image.addEventListener("mouseleave", this.createImageMouseLeaveListener())
 
-        imagemContainer.appendChild(imagem)
-        parentElement.appendChild(imagemContainer)
+        imageContainer.appendChild(image)
+        parentElement.appendChild(imageContainer)
     }
 }
