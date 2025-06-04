@@ -1,5 +1,4 @@
 class ImageZoom {
-
     constructor(src, zoom) {
         this.src = src
         this.zoom = zoom
@@ -35,7 +34,6 @@ class ImageZoom {
     }
 
     createImageMouseLeaveListener() {
-
         return (e) => {
             const image = e.currentTarget
             image.style.transform = "none"
